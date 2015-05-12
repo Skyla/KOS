@@ -23,10 +23,7 @@ A Structure closely tied to :struct:`Body` A variable of type :struct:`Atmospher
           - True if this body has an atmosphere
         * - :attr:`OXYGEN`
           - bool
-          - True if oxygen is present                           
-        * - :attr:`SCALE`
-          - scalar
-          - Used to find atmospheric density
+          - True if oxygen is present  
         * - :attr:`SEALEVELPRESSURE`
           - scalar (atm)
           - pressure at sea level
@@ -56,13 +53,6 @@ A Structure closely tied to :struct:`Body` A variable of type :struct:`Atmospher
 
     True if the air has oxygen and could therefore be used by a jet engine's intake.
     
-.. attribute:: Atmosphere:SCALE
-
-    :type: scalar
-    :access: Get only
-
-    A math constant plugged into a formula to find atmosphere density (see below).
-    
 .. attribute:: Atmosphere:SEALEVELPRESSURE
 
     :type: scalar (atm)
@@ -90,38 +80,4 @@ pressure
 
 density
     A measure of how much mass of air there is in a volume of space. In SI units, it's Kilograms per Cubic Meter.
-
-.. note::
-
-    **The following only applies to the STOCK KSP atmosphere.**
-
-    If you have installed a mod such as `FAR`_, that changes the atmosphere, then much of what is said below will not apply.
-
-.. _FAR: http://forum.kerbalspaceprogram.com/threads/20451-0-25-Ferram-Aerospace-Research-v0-14-3-2-10-21-14
-
-The level of atmosphere can be calculated for any altitude as follows:
-
--  Number of **Atm's** = (Atm's at sea level) \* ( e ^ ( -
-   sea\_level\_alt / scale ) )
-
-The **TRUE** maximum height of the atmosphere is NOT the value returned by :HEIGHT, but rather it's the altitude at which the number of Atm's returned by the above formula is 0.000001. :HEIGHT is just the value as advertised by the game to the user. On some worlds it can be quite a ways off.
-
-And once you have that number, then density can be calculated from it with this conversion factor:
-
--  air density = Number of Atm's \* 1.2230948554874.
-
-Further information about the math formulas that Kerbal Space Program uses to calculate the atmosphere `can be found here <http://wiki.kerbalspaceprogram.com/wiki/Atmosphere>`__.
-
-Examples::
-
-    IF SHIP:ORBIT:BODY:ATM:EXISTS {
-        SET thisAtmo TO SHIP:ORBIT:BODY:ATM.
-        PRINT "The planet you are orbiting has an atmosphere.".
-        PRINT "It's scale is " + thisAtmo:SCALE.
-        PRINT "It's height is " + thisAtmo:HEIGHT.
-        SET atmos TO thisAtmo:SEALEVELPRESSURE + ( CONSTANT():E ^ ( - SHIP:ALTITUDE / thisAtmo:SCALE ) ).
-        PRINT "At this altitude the atmosphere is " + atmos + " Atm's.".
-    } ELSE {
-        PRINT "The planet you are orbiting has no atmosphere.".
-    }.
 
